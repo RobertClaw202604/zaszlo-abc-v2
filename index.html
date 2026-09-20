@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 <div class="lap">
@@ -152,14 +152,16 @@
   <button data-nezet="beall"><span class="ikon">⚙️</span>Beállítások</button>
 </nav>
 
-<script src="flags.js"></script>
-<script src="lobogas-webgl.js"></script>
-<script src="zaszlo-app.js"></script>
-<script src="app-v2.js"></script>
+<script src="flags.js?v=2"></script>
+<script src="lobogas-webgl.js?v=2"></script>
+<script src="zaszlo-app.js?v=2"></script>
+<script src="app-v2.js?v=2"></script>
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
-    navigator.serviceWorker.register("sw.js").catch(function () {});
+    navigator.serviceWorker.register("sw.js?v=2", { updateViaCache: "none" })
+      .then(function (r) { if (r) r.update(); })
+      .catch(function () {});
   });
 }
 </script>

@@ -1,5 +1,5 @@
 /* PWA service worker — offline gyorsítótár */
-const GY = "zaszlo-v2-1";
+const GY = "zaszlo-v2-2";
 const FAJLOK = [
   "./", "./index.html", "./style.css", "./app-v2.js",
   "./flags.js", "./lobogas-webgl.js", "./zaszlo-app.js",
@@ -18,14 +18,18 @@ self.addEventListener("activate", function (e) {
 });
 self.addEventListener("fetch", function (e) {
   if (e.request.method !== "GET") return;
+  const url = new URL(e.request.url);
+  if (url.origin !== location.origin) return;   // külső (font) — hagyjuk a hálózatra
+  /* HÁLÓZAT-ELSŐ: mindig a friss fájlt hozzuk, a cache csak offline tartalék */
   e.respondWith(
-    caches.match(e.request).then(function (talalt) {
-      if (talalt) return talalt;
-      return fetch(e.request).then(function (valasz) {
-        const masolat = valasz.clone();
-        caches.open(GY).then(function (c) { c.put(e.request, masolat); });
-        return valasz;
-      }).catch(function () { return caches.match("./index.html"); });
+    fetch(e.request).then(function (valasz) {
+      const masolat = valasz.clone();
+      caches.open(GY).then(function (c) { c.put(e.request, masolat); });
+      return valasz;
+    }).catch(function () {
+      return caches.match(e.request).then(function (t) {
+        return t || caches.match("./index.html");
+      });
     })
   );
 });
