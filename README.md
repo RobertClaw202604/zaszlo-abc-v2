@@ -53,6 +53,13 @@ A v2 fő célja: **görgetés nélkül** elférjen. Ezért:
 
 - `_v2test.js` — **16/16** (fordítás, nézetek, betű-kapcsoló, PNG-export, link, mobil sáv)
 
+## PWA cache — FONTOS
+
+A `sw.js` **hálózat-első** stratégiát használ (a cache csak offline tartalék),
+és a cache-neve verziózott (`zaszlo-v2-2`). **Javításnál léptesd a
+cache-verziót ÉS a `?v=` paramétert a HTML-ben**, különben a böngésző a régi
+változatot szolgálja ki.
+
 ## Fejlesztés
 
 ```bash
