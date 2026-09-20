@@ -1,0 +1,4 @@
+_kepek/
+_*.png
+node_modules/
+.DS_Store

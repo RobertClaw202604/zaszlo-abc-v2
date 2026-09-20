@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1c2b3a">
+<title>Jelzőzászló-fordító — Régi tengerész</title>
+<meta name="description" content="Írj be bármit, és megnézheted nemzetközi hajózási jelzőzászlókon — lobogva.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="lap">
+
+  <header class="fej">
+    <h1 class="cim"><span class="kek">Jelzőzászló</span>-fordító <span class="voros">⚓</span></h1>
+    <p class="alcim">Írj be bármit — megnézheted nemzetközi hajózási jelzőzászlókon, lobogva.</p>
+  </header>
+
+  <div class="racs">
+
+    <section class="kartya" id="bemenetKartya">
+      <h2>Az üzenet</h2>
+      <div class="bemenetSor">
+        <input id="szo" type="text" maxlength="40" autocomplete="off"
+               spellcheck="false" placeholder="Írj be egy szót vagy nevet…">
+        <button class="gombKerek" id="torles">Törlés</button>
+      </div>
+      <div class="meta">
+        <span><b id="hossz">0</b> karakter · <b id="zaszlok">0</b> zászló</span>
+        <span id="linkInfo" style="color:var(--arany);font-weight:600"></span>
+      </div>
+
+      <div class="fulek" id="fulek">
+        <button data-m="A" class="on">Sorban<span>egymás mellett</span></button>
+        <button data-m="B">Egymás után<span>lépegetve</span></button>
+        <button data-m="C">Videó<span>letölthető</span></button>
+      </div>
+    </section>
+
+    <section class="kartya" id="szinpadKartya">
+      <div class="stage" id="stageA">
+        <canvas id="cvA"></canvas>
+        <canvas id="cvAbetu" class="betuReteg"></canvas>
+        <div class="fps" id="fpsA">– fps</div>
+      </div>
+
+      <div class="panel on" id="p-A">
+        <div class="gombok" style="margin-top:14px">
+          <button id="betuGomb" class="mas">Betűk mutatása</button>
+          <button id="pngA">PNG (tenger)</button>
+          <button id="pngA2" class="mas">PNG (papír)</button>
+          <button id="linkA" class="mas">Link</button>
+        </div>
+        <div class="ctrl" id="ctrlA" style="margin-top:14px"></div>
+      </div>
+
+      <div class="panel" id="p-B">
+        <div class="stage" style="margin-top:14px">
+          <canvas id="cvB" width="1400" height="820"></canvas>
+          <canvas id="cvBbetu" class="betuReteg"></canvas>
+        </div>
+        <div class="lepteto" style="margin-top:14px">
+          <button id="vissza">◀</button>
+          <div class="pontok" id="pontok"></div>
+          <button id="elore">▶</button>
+        </div>
+        <div class="modValto" style="margin-top:12px">
+          <button id="autoGomb">Automatikus</button>
+          <button id="sebGomb" class="on">1.5 s</button>
+          <button id="betuGombB" class="mas">Betűk mutatása</button>
+        </div>
+        <div class="ctrl" id="ctrlB" style="margin-top:14px"></div>
+        <p class="note" style="margin-top:12px">
+          Ahogy a jelet egyszerre olvassák: egyszerre csak egy zászló látszik.
+        </p>
+      </div>
+
+      <div class="panel" id="p-C">
+        <div class="stage" style="margin-top:14px">
+          <canvas id="cvC" width="1280" height="720"></canvas>
+        </div>
+        <div class="ctrl" style="margin-top:14px">
+          <div class="row">
+            <label>Felbontás</label>
+            <select id="vFelbontas">
+              <option value="1280x720">1280 × 720</option>
+              <option value="1920x1080" selected>1920 × 1080</option>
+              <option value="1080x1920">1080 × 1920 (álló)</option>
+            </select>
+          </div>
+          <div class="row">
+            <label>Háttér</label>
+            <select id="vHatter">
+              <option value="dark">Tenger (sötét)</option>
+              <option value="light">Papír (világos)</option>
+            </select>
+          </div>
+          <div class="row">
+            <label>Hossz <b id="l-vido">5.0 s</b></label>
+            <input type="range" id="vIdo" min="20" max="120" value="50">
+          </div>
+        </div>
+        <div class="gombok" style="margin-top:14px">
+          <button id="felvetel">Felvétel indítása</button>
+          <button id="vLetolt" class="mas" disabled>Videó letöltése</button>
+        </div>
+        <p class="note" id="recAllapot" style="margin-top:10px"></p>
+      </div>
+    </section>
+
+    <aside class="kartya" id="oldalKartya">
+      <h2>Beállítások</h2>
+
+      <div class="csoport" id="csoportZaszlo">
+        <p class="csoportFelirat">Zászlósor</p>
+        <div class="ctrl" id="ctrlA2"></div>
+      </div>
+
+      <div class="csoport">
+        <p class="csoportFelirat">Letöltés &amp; megosztás</p>
+        <div class="gombok">
+          <button id="pngA3">Kép mentése</button>
+          <button id="linkA2" class="mas">Link másolása</button>
+        </div>
+      </div>
+
+      <div class="csoport">
+        <p class="csoportFelirat">Tudnivaló</p>
+        <p class="note">
+          Az ékezetes betűk a legközelebbi zászlóra képződnek
+          (Á→A, Ő→O, Ű→U). A szóköz egyszerű hézag.
+        </p>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer class="lab desktopCsak">
+    Készült az <a href="https://arworks.hu" target="_blank" rel="noopener">ARworks</a> műhelyében ·
+    Nemzetközi jelzőzászló-készlet (ICS)
+  </footer>
+</div>
+
+<nav class="alsoSav" id="alsoSav">
+  <button data-nezet="A" class="on"><span class="ikon">🏳️</span>Sorban</button>
+  <button data-nezet="B"><span class="ikon">🔤</span>Egymás után</button>
+  <button data-nezet="C"><span class="ikon">🎬</span>Videó</button>
+  <button data-nezet="beall"><span class="ikon">⚙️</span>Beállítások</button>
+</nav>
+
+<script src="flags.js"></script>
+<script src="lobogas-webgl.js"></script>
+<script src="zaszlo-app.js"></script>
+<script src="app-v2.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  });
+}
+</script>
+</body>
+</html>
